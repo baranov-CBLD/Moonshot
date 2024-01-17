@@ -12,23 +12,29 @@ struct GridView: View {
     let astronauts: [String: Astronaut]
     let missions: [Mission]
     
-    let columns = [
-        GridItem(.adaptive(minimum: 150))
-    ]
+    let columns = [GridItem(.flexible()), GridItem(.flexible())]
+
+//    let columns = [
+//        GridItem(.adaptive(minimum: 150))
+//    ]
     
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns) {
                 ForEach(missions) { mission in
                     VStack {
-                        NavigationLink {
-                            MissionView(mission: mission, crew: mission.filterAstronauts(astronauts))
-                        } label: {
+                        
+//                        NavigationLink {
+//                            MissionView(mission: mission, crew: mission.filterAstronauts(astronauts))
+//                        } label: {
+                        
+                        NavigationLink(value: mission) {
+
                             VStack {
                                 Image(mission.image)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 100, height: 100)
+                                    .frame(width: 90, height: 90)
                                     .padding()
                                 VStack {
                                     Text(mission.displayName)
@@ -45,12 +51,16 @@ struct GridView: View {
                             }
                         }
                     }
+                    
                     .clipShape(.rect(cornerRadius: 10))
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(.lightBackground)
                     )
                     
+                }
+                .navigationDestination(for: Mission.self) { mission in
+                    MissionView(mission: mission, crew: mission.filterAstronauts(astronauts))
                 }
                 
             }
@@ -62,38 +72,3 @@ struct GridView: View {
 }
 
 
-struct ListView: View {
-    
-    let astronauts: [String: Astronaut]
-    let missions: [Mission]
-    
-    var body: some View {
-        
-        List {
-            ForEach(missions) { mission in
-                NavigationLink {
-                    MissionView(mission: mission, crew: mission.filterAstronauts(astronauts))
-                } label: {
-                    HStack {
-                        Image(mission.image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50, height: 50)
-                            .padding()
-                    HStack {
-                            Text(mission.displayName)
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                            Text(mission.formattedLaunchDate)
-                                .font(.caption)
-                                .foregroundStyle(.white.opacity(0.5))
-                        }
-                        .padding(.vertical)
-                    }
-                }
-            }
-        }
-        .scrollContentBackground(.hidden)
-    }
-    
-}

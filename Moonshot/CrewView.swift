@@ -12,11 +12,13 @@ struct CrewView: View {
     var crew: [CrewMember]
     
     var body: some View {
+        
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(crew, id: \.role) { crewMember in
                     NavigationLink {
-                        Text("Astronaut details")
+                        Image(crewMember.astronaut.id)
+                        Text(crewMember.astronaut.description)
                     } label: {
                         HStack {
                             Image(crewMember.astronaut.id)
@@ -27,7 +29,7 @@ struct CrewView: View {
                                     Rectangle()
                                         .strokeBorder(.white, lineWidth: 1)
                                 )
-
+                            
                             VStack(alignment: .leading) {
                                 Text(crewMember.astronaut.name)
                                     .foregroundStyle(.white)
@@ -40,7 +42,8 @@ struct CrewView: View {
                     }
                 }
             }
-        }    }
+        }
+    }
 }
 
 //#Preview {

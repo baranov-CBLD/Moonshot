@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Mission: Codable, Identifiable {
+struct Mission: Codable, Identifiable, Hashable {
     
-    struct CrewRole: Codable {
+    struct CrewRole: Codable, Hashable {
         let name: String
         let role: String
     }
@@ -32,7 +32,7 @@ struct Mission: Codable, Identifiable {
     }
     
     func filterAstronauts(_ astronauts: [String: Astronaut]) -> [CrewMember] {
-        var currentCrew: [CrewMember] = self.crew.map { member in
+        let currentCrew: [CrewMember] = self.crew.map { member in
             if let astronaut = astronauts[member.name] {
                 return CrewMember(role: member.name, astronaut: astronaut)
             } else {
@@ -43,7 +43,7 @@ struct Mission: Codable, Identifiable {
     }
 }
 
-struct CrewMember {
+struct CrewMember: Hashable {
     let role: String
     let astronaut: Astronaut
 }
